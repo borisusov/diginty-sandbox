@@ -1,0 +1,77 @@
+Hello Boris,
+
+Here is the outline of the task
+
+General
+You will need to setup CI/CD pipeline and cloud infrastructure for the "hello-env" application. 
+CI/CD pipeline should automate code integration and deployment to "QA" and "production" environments on GCE. All the details are covered below
+
+Access
+You should have received all the invitations (to GCE and Bitbucket) to your inbox.
+You were assigned admin/owner role for corresponding Bitbucket Team and GCE Project.
+Take your time to discover GCE console (https://console.cloud.google.com). Your main working areas will be "Compute Engine", "VPC network" , "Storage"and "IAM & Admin"
+
+Application
+In the https://bitbucket.org/diginty-sandbox/hello-env repository you will find the application you'll need to build the cloud infrastructure and CI/CD for.
+It's simple python3.6/Flask application with a valid Dockerfile to build an image and run a container
+
+CI/CD
+Manually set up a Jenkins server on GCE (diginty-playground project):
+VPC: default
+subnet: us-east-1
+base image: debian-9 (Stretch)
+Machine type: g1-small
+external IP: jenkins-ext-ip (35.237.80.60)
+Basic authentication ( sandbox:Install_new! )
+No SSL
+Implement a declarative pipeline consisting of next steps:
+1. Build application container for hello-env application
+2. Push the container to GCE container registry as diginty-sandbox/hello-env:VERSION (you can fetch current version from the VERSION file in the application repo)
+3. Provision/update server infrastructure and deploy the application container to QA environment (calls other Jenkins job, which fetches code from hello-env-tf repo and executes it with terraform for QA env)
+4. Wait for user input to promote to next step
+5.Provision/update server infrastructure and deploy the application container to production environment (calls other Jenkins job, which fetches code from hello-env-tf repo and executes it with terraform for production env)
+
+Pipeline job should be triggered on any change to hello-env repo master branch.
+Pipeline job should be implemented as a Jenkinsfile in hello-env repo.
+All the Jenkins job instances names should include application version from VERSION file (e.g. hello-env-pipeline [0.0.1] )
+
+Cloud Infrastructure
+Please implement terraform code to automate infrastructure provisioning/decomissioning and application deployment.
+Use hello-env-tf repo for your tf code.
+Application should be available on port 80 of the env external IPs.
+
+Hints:
+Utilize hello-env-tf cloud storage bucket for the terraform state
+Utilize terraform environments
+Utilize variable file(s) to store settings for each environment
+
+QA Environment
+Consists of:
+Application Server
+VPC: default
+subnet: us-central1
+Machine type:  f1-micro
+external IP: hello-env-qa-ext-ip (104.197.176.252)
+Production Environment
+Consists of:
+Application Server
+VPC: default
+subnet: us-west1
+Machine type:  g1-small
+external IP: hello-env-prod-ext-ip (34.83.191.174)
+
+Bonus 1
+Display customized application message for different environments (application allows it via configuration)
+
+Bonus 2
+Utilize Instance Groups and Load Balancer for both QA and production environments. Set auto-scaling policy for CPU load > 80%, min instances:1, max instances: 3
+
+
+Happy coding! :) 
+Please let me know if you need any help.
+
+Also, we propose to cancel our meeting in person tomorrow. Just ping us via email and we can set up a Meet or Skype meeting whenever you need.
+
+Best,
+
+
